@@ -19,12 +19,6 @@ const SUN_POSITION_DATA = [
   { id: 8, time: '21:30', title: '29°', emoji: '❄️' },
 ]
 
-const CITIES_DEGREE_DATA = [
-  { id: 1, name: 'Varna', degree: '29°' },
-  { id: 2, name: 'Bucharest', degree: '33°' },
-  { id: 3, name: 'Sofia', degree: '31°' },
-  { id: 4, name: 'Constanta', degree: '28°' },
-]
 
 const SunPositionListItem: React.FC<{ time: string, title: string, emoji: string }> = ({ time, title, emoji }) => (
   <View style={styles.timeList}>
@@ -33,10 +27,6 @@ const SunPositionListItem: React.FC<{ time: string, title: string, emoji: string
     <Text style={styles.titleList}>{title}</Text>
   </View>
 );
-
-
-
-
 
 
 export default function HomeScreen() {
