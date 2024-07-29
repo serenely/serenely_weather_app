@@ -6,19 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from "../redux/store";
 import { useEffect } from "react";
 import { fetchWeather } from "../redux/reducers/weatherSlice";
-
-
-const SUN_POSITION_DATA = [
-  { id: 1, time: '00:30', title: '25°', emoji: '☀️' },
-  { id: 2, time: '03:30', title: '23°', emoji: '🌧️' },
-  { id: 3, time: '06:30', title: '27°', emoji: '⛅' },
-  { id: 4, time: '09:30', title: '30°', emoji: '🌩️' },
-  { id: 5, time: '12:30', title: '31°', emoji: '🌧️' },
-  { id: 6, time: '15:30', title: '33°', emoji: '☀️' },
-  { id: 7, time: '18:30', title: '32°', emoji: '⛅' },
-  { id: 8, time: '21:30', title: '29°', emoji: '❄️' },
-]
-
+import { SUN_POSITION_DATA } from "../constants/constants";
 
 const SunPositionListItem: React.FC<{ time: string, title: string, emoji: string }> = ({ time, title, emoji }) => (
   <View style={styles.timeList}>
@@ -28,6 +16,16 @@ const SunPositionListItem: React.FC<{ time: string, title: string, emoji: string
   </View>
 );
 
+const CitiesListItem: React.FC<{ name: string, degree: string }> = ({ name, degree }) => (
+  <View style={styles.currentCity}>
+    <Link style={styles.anotherCityBtn} href={{ pathname: '/cities/[id]', params: { id: name } }}> {name}</Link>
+    <View>
+      <Text style={styles.degree}>
+        {degree}
+      </Text>
+    </View>
+  </View>
+)
 
 export default function HomeScreen() {
   const dispatch = useDispatch<AppDispatch>();
@@ -36,17 +34,6 @@ export default function HomeScreen() {
   useEffect(() => {
     dispatch(fetchWeather());
   }, [dispatch]);
-
-  const CitiesListItem: React.FC<{ name: string, degree: string }> = ({ name, degree }) => (
-    <View style={styles.currentCity}>
-      <Link style={styles.anotherCityBtn} href={{ pathname: '/cities/[id]', params: { id: name } }}> {name}</Link>
-      <View>
-        <Text style={styles.degree}>
-          {degree}
-        </Text>
-      </View>
-    </View>
-  )
 
   return (
     <LinearGradient
