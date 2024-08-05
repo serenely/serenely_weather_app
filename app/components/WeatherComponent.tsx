@@ -7,29 +7,11 @@ import { AppDispatch, RootState } from "../redux/store";
 import { useEffect } from "react";
 import { fetchWeather } from "../redux/reducers/weatherSlice";
 import { SUN_POSITION_DATA } from "../constants/constants";
-
-const SunPositionListItem: React.FC<{ time: string, title: string, emoji: string }> = ({ time, title, emoji }) => (
-  <View style={styles.timeList}>
-    <Text style={styles.titleList}>{time}</Text>
-    <Text style={styles.titleList}>{emoji}</Text>
-    <Text style={styles.titleList}>{title}</Text>
-  </View>
-);
-
-const CitiesListItem: React.FC<{ name: string, degree: string }> = ({ name, degree }) => (
-  <View style={styles.currentCity}>
-    <Link style={styles.anotherCityBtn} href={{ pathname: '/cities/[id]', params: { id: name } }}> {name}</Link>
-    <View>
-      <Text style={styles.degree}>
-        {degree}
-      </Text>
-    </View>
-  </View>
-)
+import { CitiesListItem, SunPositionListItem } from "./ListItems";
 
 export default function HomeScreen() {
   const dispatch = useDispatch<AppDispatch>();
-  const weather = useSelector((state: RootState)=> state.weather)
+  const weather = useSelector((state: RootState) => state.weather)
 
   useEffect(() => {
     dispatch(fetchWeather());
@@ -46,7 +28,7 @@ export default function HomeScreen() {
         <Text style={styles.searchText}>Search the city...</Text>
       </View>
       <View style={styles.anotherCitiesContainer}>
-      <Icon name="arrow-left" iconStyle={styles.arrows}  />  
+        <Icon name="arrow-left" iconStyle={styles.arrows} />
 
         <FlatList
           data={weather.data.slice(1)}
@@ -55,7 +37,7 @@ export default function HomeScreen() {
           showsHorizontalScrollIndicator={false}
           keyExtractor={item => item.id.toString()}
         />
-      <Icon name="arrow-right" iconStyle={styles.arrows}  />  
+        <Icon name="arrow-right" iconStyle={styles.arrows} />
 
         <View style={styles.arrows}>
         </View>
@@ -118,22 +100,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  currentCity: {
-    margin: 5,
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  anotherCityBtn: {
-    textAlign: 'center',
-    color: 'white',
-    fontSize: 20,
-    margin: 10,
-    padding: 10,
-    fontWeight: 'bold',
-  },
   arrows: {
     color: 'white',
     fontSize: 20,
@@ -147,7 +113,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-
   text: {
     color: 'white',
     fontSize: 40,
