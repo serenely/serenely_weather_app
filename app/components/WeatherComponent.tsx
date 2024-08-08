@@ -1,56 +1,68 @@
-import { Text, View, StyleSheet, FlatList } from "react-native";
+import { Text, View, StyleSheet, FlatList, Button, TouchableOpacity, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { Link } from "expo-router";
 import { Icon } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from "../redux/store";
-import { useEffect } from "react";
-import { fetchWeather } from "../redux/reducers/weatherSlice";
+import { useEffect, useState } from "react";
+import weatherSlice, { fetchWeather } from "../redux/reducers/weatherSlice";
 import { SUN_POSITION_DATA } from "../constants/constants";
 import { CitiesListItem, SunPositionListItem } from "./ListItems";
+import SearchBar from "./SearchBar";
 
 export default function HomeScreen() {
   const dispatch = useDispatch<AppDispatch>();
   const weather = useSelector((state: RootState) => state.weather)
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     dispatch(fetchWeather());
   }, [dispatch]);
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+
     <LinearGradient
       colors={['#a16bde', '#a0c4ff', '#f4b8ba']}
       start={{ x: 2, y: 0 }}
       end={{ x: 0, y: 1 }}
       style={styles.container}
     >
-      <View style={styles.searchContainer}>
-        <Text style={styles.searchText}>Search the city...</Text>
-      </View>
+
+      <SearchBar 
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        onSearch={()=> console.log(searchQuery, 'searchQuery')
+        }
+      />
       <View style={styles.anotherCitiesContainer}>
         <Icon name="arrow-left" iconStyle={styles.arrows} />
-
-        <FlatList
+        {(weather.loading) ? (<ActivityIndicator />) : (<FlatList
           data={weather.data.slice(1)}
           renderItem={({ item }) => <CitiesListItem name={item.cityName || 'uknown'} degree={item.cityTemperature?.toFixed(1) || 'N/A'} />}
           horizontal
           showsHorizontalScrollIndicator={false}
           keyExtractor={item => item.id.toString()}
-        />
+        />)}
         <Icon name="arrow-right" iconStyle={styles.arrows} />
-
         <View style={styles.arrows}>
         </View>
       </View>
       <View style={styles.mainContainer} >
-        <Text style={styles.text}>
-          {weather.data[0]?.cityName}
-        </Text>
-        <View>
-          <Text style={styles.degree}>
-            {weather.data[0]?.cityTemperature?.toFixed(1)}°
-          </Text>
-        </View>
+        {(weather.loading) ? (<ActivityIndicator />) :
+          (
+            <>
+              <>
+                <Text style={styles.text}>
+                  {weather.data[0]?.cityName}
+                </Text>
+              </>
+              <>
+                <Text style={styles.degree}>
+                  {weather.data[0]?.cityTemperature?.toFixed(1)}°
+                </Text>
+              </>
+            </>
+          )}
         <View style={styles.sunPosition}>
           <View style={styles.sunRise}>
             <Text style={styles.sunRiseSetText}>
@@ -73,6 +85,8 @@ export default function HomeScreen() {
         />
       </View>
     </LinearGradient >
+    </TouchableWithoutFeedback>
+
   );
 }
 
@@ -85,6 +99,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: 'white',
     opacity: 0.5,
+    backgroundColor: 'transparent',
+  },
+  searchContainerBtn: {
+    padding: 5
   },
   searchText: {
     color: 'white',

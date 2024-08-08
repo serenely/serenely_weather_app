@@ -31,7 +31,7 @@ export async function fetchCityWeather(lat: number, lon: number): Promise<Weathe
   }
 }
 
-export function temperatureCelsius(cityTemperature: string): number {
+ function temperatureCelsius(cityTemperature: string): number {
   const kelvin = parseFloat(cityTemperature) 
   return kelvin - 273.15  
 }
